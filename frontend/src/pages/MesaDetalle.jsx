@@ -1,97 +1,447 @@
-import { useParams } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import MesaService from "../services/MesaService";
+
 
 function MesaDetalle() {
 
+
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  const productos = [
-    { nombre: "Hamburguesa", precio: 25000 },
-    { nombre: "Pizza", precio: 35000 },
-    { nombre: "Gaseosa", precio: 5000 },
-    { nombre: "Papas", precio: 8000 }
-  ];
 
-  const [consumos, setConsumos] = useState([]);
+  const [mesa, setMesa] = useState(
+    () => MesaService.obtenerMesa(id)
+  );
 
-  const agregarConsumo = (producto) => {
-    setConsumos([...consumos, producto]);
+
+
+  if (!mesa) {
+
+    return <h2>Cargando...</h2>;
+
+  }
+
+
+
+  const iniciarServicio = () => {
+
+    MesaService.iniciarServicio(id);
+
+    setMesa(
+      MesaService.obtenerMesa(id)
+    );
+
   };
 
-  const total = consumos.reduce(
-    (acum, item) => acum + item.precio,
-    0
-  );
+
+
+  // ➕ AUMENTAR PRODUCTO
+  const agregarConsumo = (producto) => {
+
+
+    MesaService.agregarProducto(
+      id,
+      producto
+    );
+
+
+    setMesa(
+      MesaService.obtenerMesa(id)
+    );
+
+
+  };
+
+
+
+
+
+  // ➖ RESTAR PRODUCTO
+  const eliminarProducto = (index) => {
+
+
+    MesaService.eliminarProducto(
+      id,
+      index
+    );
+
+
+    setMesa(
+      MesaService.obtenerMesa(id)
+    );
+
+
+  };
+
+
+
+
+
+  const cobrar = () => {
+
+
+    alert(
+      `Mesa ${id} cobrada por $${(mesa.total || 0).toLocaleString()}`
+    );
+
+
+    MesaService.cobrarMesa(id);
+
+
+    navigate("/mesas");
+
+
+  };
+
+
+
+
 
   return (
+
+
     <div className="mesa-detalle">
 
-      <h1>🍽️ Mesa {id}</h1>
 
-      <h2>Menú Disponible</h2>
-
-      <div className="menu-grid">
-
-        {productos.map((producto, index) => (
-          <div
-            className="menu-card"
-            key={index}
-          >
-
-            <h3>{producto.nombre}</h3>
-
-            <p>
-              ${producto.precio.toLocaleString()}
-            </p>
-
-            <button
-              className="btn-order"
-              onClick={() => agregarConsumo(producto)}
-            >
-              ➕ Agregar
-            </button>
-
-          </div>
-        ))}
-
-      </div>
-
-      <h2 style={{ marginTop: "40px" }}>
-        🧾 Consumo de la Mesa
-      </h2>
-
-      {consumos.length === 0 ? (
-        <p>No hay productos agregados.</p>
-      ) : (
-        <ul className="lista-consumos">
-
-          {consumos.map((item, index) => (
-            <li key={index}>
-              {item.nombre} - $
-              {item.precio.toLocaleString()}
-            </li>
-          ))}
-
-        </ul>
-      )}
-
-      <h2 className="total-mesa">
-        Total: ${total.toLocaleString()}
-      </h2>
 
       <button
-        className="btn-cobrar"
-        onClick={() =>
-          alert(
-            `Mesa ${id} cobrada por $${total.toLocaleString()}`
-          )
-        }
+        className="btn-volver"
+        onClick={() => navigate("/mesas")}
       >
-        💰 Cobrar Mesa
+
+        ⬅ Volver a Mesas
+
       </button>
 
+
+
+
+
+      <h1>
+        🍽️ Mesa {id}
+      </h1>
+
+
+
+
+
+
+      {mesa.cliente && (
+
+
+        <div className="cliente-info">
+
+
+          <h3>
+            👤 Cliente
+          </h3>
+
+
+          <p>
+            {mesa.cliente}
+          </p>
+
+
+        </div>
+
+
+      )}
+
+
+
+
+
+
+      {mesa.reservada && (
+
+
+        <button
+          className="btn-iniciar"
+          onClick={iniciarServicio}
+        >
+
+          🟢 Iniciar Servicio
+
+        </button>
+
+
+      )}
+
+
+
+
+
+
+
+      <button
+
+        className="btn-order"
+
+        onClick={() => navigate(`/menu?mesa=${id}`)}
+
+      >
+
+        🍽️ Ver menú completo
+
+      </button>
+
+
+
+
+
+
+
+
+
+      <h2 style={{marginTop:"40px"}}>
+
+        🧾 Consumo de la Mesa
+
+      </h2>
+
+
+
+
+
+
+
+      {!mesa.consumos || mesa.consumos.length === 0 ? (
+
+
+
+        <p className="sin-consumos">
+
+          No hay productos agregados.
+
+        </p>
+
+
+
+      ) : (
+
+
+
+
+        <div className="lista-consumos">
+
+
+
+
+
+          {mesa.consumos.map((item,index)=>(
+
+
+
+
+            <div
+
+              className="consumo-card"
+
+              key={index}
+
+            >
+
+
+
+
+
+              <div className="consumo-info">
+
+
+
+
+
+                <h3>
+
+                  {item.nombre}
+
+                </h3>
+
+
+
+
+
+
+                <p>
+
+                  Precio:
+
+                  <strong>
+
+                    {" "}
+                    ${item.precio.toLocaleString()}
+
+                  </strong>
+
+
+                </p>
+
+
+
+
+
+
+
+                <p>
+
+                  Subtotal:
+
+                  <strong>
+
+                    {" "}
+                    ${(item.precio * item.cantidad).toLocaleString()}
+
+                  </strong>
+
+
+                </p>
+
+
+
+
+
+              </div>
+
+
+
+
+
+
+
+
+
+              <div className="cantidad-box">
+
+
+
+
+
+                <button
+
+                  className="btn-cantidad"
+
+                  onClick={() => eliminarProducto(index)}
+
+                >
+
+                  ➖
+
+                </button>
+
+
+
+
+
+
+
+                <span>
+
+                  {item.cantidad}
+
+                </span>
+
+
+
+
+
+
+
+
+                <button
+
+                  className="btn-cantidad"
+
+                  onClick={() => agregarConsumo({
+
+                    nombre:item.nombre,
+
+                    precio:item.precio
+
+                  })}
+
+                >
+
+                  ➕
+
+                </button>
+
+
+
+
+
+
+              </div>
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+          ))}
+
+
+
+
+
+
+        </div>
+
+
+
+
+      )}
+
+
+
+
+
+
+
+      <h2 className="total-mesa">
+
+
+        Total: ${(mesa.total || 0).toLocaleString()}
+
+
+      </h2>
+
+
+
+
+
+
+      <button
+
+        className="btn-cobrar"
+
+        onClick={cobrar}
+
+      >
+
+        💰 Cobrar Mesa
+
+      </button>
+
+
+
+
+
+
+
     </div>
+
+
+
   );
+
 }
+
 
 export default MesaDetalle;
