@@ -21,6 +21,7 @@ function Navbar() {
           <li><Link to="/registro">📝 Registro</Link></li>
           <li><Link to="/carrito">🛒 Carrito</Link></li>
           <li><Link to="/mesas">🍽️ Mesas</Link></li>
+          <li><Link to="/administrar-menu">🛠️ Administrar Menú</Link></li>
           
         </ul>
 

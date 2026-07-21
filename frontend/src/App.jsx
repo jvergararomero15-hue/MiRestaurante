@@ -12,6 +12,7 @@ import Reservas from './pages/Reservas';
 import Carrito from './pages/Carrito';
 import Mesas from './pages/Mesas';
 import MesaDetalle from './pages/MesaDetalle';
+import AdministrarMenu from "./pages/AdministrarMenu";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/reservas" element={<Reservas />} />
           <Route path="/carrito" element={<Carrito />} />
           <Route path="/mesas" element={<Mesas />} />
+          <Route path="/administrar-menu" element={<AdministrarMenu />} />
 
           {/* Página individual de cada mesa */}
           <Route path="/mesa/:id" element={<MesaDetalle />} />

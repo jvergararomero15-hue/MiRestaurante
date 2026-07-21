@@ -8,36 +8,35 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "PEDIDO")
+@Table(name = "RESERVA")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pedido {
+public class Reserva {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_PEDIDO")
-    private Long idPedido;
+    @Column(name = "ID_RESERVA")
+    private Long idReserva;
 
     @Column(name = "FECHA")
     private LocalDate fecha;
 
-    @Column(name = "TOTAL")
-    private Double total;
+    @Column(name = "HORA")
+    private String hora;
+
+    @Column(name = "CANTIDAD_PERSONAS")
+    private Integer cantidadPersonas;
 
     @Column(name = "ESTADO")
     private String estado;
-
-    @ManyToOne
-    @JoinColumn(name = "ID_MESA")
-    private Mesa mesa;
 
     @ManyToOne
     @JoinColumn(name = "ID_CLIENTE")
     private Cliente cliente;
 
     @ManyToOne
-    @JoinColumn(name = "ID_USUARIO")
-    private Usuario usuario;
+    @JoinColumn(name = "ID_MESA")
+    private Mesa mesa;
 
 }

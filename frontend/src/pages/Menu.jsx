@@ -2,90 +2,9 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import MesaService from "../services/MesaService";
 
+import MenuService from "../services/MenuService";
+const platos = MenuService.obtenerPlatos();
 
-const platos = [
-
-  {
-    id: 1,
-    nombre: "Hamburguesa Clásica",
-    precio: 25000,
-    descripcion: "Pan artesanal, carne, queso y verduras",
-    imagen: "🍔"
-  },
-
-  {
-    id: 2,
-    nombre: "Pizza Especial",
-    precio: 35000,
-    descripcion: "Queso, carnes y vegetales frescos",
-    imagen: "🍕"
-  },
-
-  {
-    id: 3,
-    nombre: "Pasta Carbonara",
-    precio: 18000,
-    descripcion: "Pasta cremosa con queso y panceta",
-    imagen: "🍝"
-  },
-
-  {
-    id: 4,
-    nombre: "Pollo a la Parrilla",
-    precio: 28000,
-    descripcion: "Pollo acompañado con papas y ensalada",
-    imagen: "🍗"
-  },
-
-  {
-    id: 5,
-    nombre: "Salmón al Horno",
-    precio: 32000,
-    descripcion: "Salmón acompañado con verduras",
-    imagen: "🐟"
-  },
-
-  {
-    id: 6,
-    nombre: "Ensalada César",
-    precio: 15000,
-    descripcion: "Lechuga, pollo, queso y aderezo",
-    imagen: "🥗"
-  },
-
-  {
-    id: 7,
-    nombre: "Papas con Queso",
-    precio: 9000,
-    descripcion: "Papas crocantes con queso",
-    imagen: "🍟"
-  },
-
-  {
-    id: 8,
-    nombre: "Gaseosa",
-    precio: 5000,
-    descripcion: "Bebida fría",
-    imagen: "🥤"
-  },
-
-  {
-    id: 9,
-    nombre: "Postre de Chocolate",
-    precio: 8000,
-    descripcion: "Postre casero",
-    imagen: "🍰"
-  },
-
-  {
-    id: 10,
-    nombre: "Café Colombiano",
-    precio: 7000,
-    descripcion: "Café tradicional colombiano",
-    imagen: "☕"
-  }
-
-];
 
 
 
