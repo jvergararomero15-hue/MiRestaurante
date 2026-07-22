@@ -1,5 +1,6 @@
 package com.bakend.bakendProyecto.Modelo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class Usuario {
     @Column(name = "CORREO")
     private String correo;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "PASSWORD")
     private String password;
 

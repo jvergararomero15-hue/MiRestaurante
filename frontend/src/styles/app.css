@@ -1758,3 +1758,49 @@ padding:30px;
   transform: scale(0.95);
 
 }
+/*=============================
+   MENSAJE DE ÉXITO (TOAST)
+==============================*/
+
+.toast-exito{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg,#27ae60,#2ecc71);
+    color:#fff;
+    padding:15px 22px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:15px;
+    font-weight:600;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+    animation:toastEntrada .35s ease;
+    z-index:9999;
+}
+
+.toast-icon{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    background:rgba(255,255,255,.2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:18px;
+}
+
+@keyframes toastEntrada{
+
+    from{
+        opacity:0;
+        transform:translateX(120px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+
+}

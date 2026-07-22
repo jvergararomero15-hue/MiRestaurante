@@ -1,299 +1,112 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import MesaService from "../services/MesaService";
-
 import MenuService from "../services/MenuService";
-const platos = MenuService.obtenerPlatos();
-
-
-
 
 function Menu() {
 
-
   const navigate = useNavigate();
-
-
   const [searchParams] = useSearchParams();
-
-
-  // Si existe mesaId significa que viene desde una mesa
   const mesaId = searchParams.get("mesa");
 
-
-
+  const [platos, setPlatos] = useState([]);
+  const [cargando, setCargando] = useState(true);
   const [mensaje, setMensaje] = useState("");
 
+  useEffect(() => {
+    const cargarPlatos = async () => {
+      try {
+        const data = await MenuService.obtenerPlatos();
+        setPlatos(data);
+      } catch (error) {
+        console.error("Error al cargar platos:", error);
+      } finally {
+        setCargando(false);
+      }
+    };
 
-
-
+    cargarPlatos();
+  }, []);
 
   const agregar = (plato) => {
+    if (!mesaId) return;
 
+    MesaService.agregarProducto(mesaId, {
+      nombre: plato.nombre,
+      precio: plato.precio,
+    });
 
-    if(!mesaId) return;
-
-
-
-    MesaService.agregarProducto(
-
-      mesaId,
-
-      {
-        nombre: plato.nombre,
-        precio: plato.precio
-      }
-
-    );
-
-
-
-    setMensaje(
-      `✅ ${plato.nombre} agregado a Mesa ${mesaId}`
-    );
-
-
+    setMensaje(`✅ ${plato.nombre} agregado con éxito a la Mesa ${mesaId}`);
 
     setTimeout(() => {
-
       setMensaje("");
-
-    },2000);
-
-
+    }, 2500);
   };
 
-
-
-
-
-
+  if (cargando) {
+    return (
+      <h2 style={{ color: "white", textAlign: "center" }}>
+        Cargando menú...
+      </h2>
+    );
+  }
 
   return (
-
-
     <div className="menu">
 
-
-
-
-
-      {mesaId && (
-
-        <button
-
-          className="btn-volver"
-
-          onClick={() => navigate(`/mesa/${mesaId}`)}
-
-        >
-
-          ⬅ Volver a Mesa {mesaId}
-
-        </button>
-
-
-      )}
-
-
-
-
-
-
-
-      {mesaId && mensaje !== "" && (
-
-
-        <div
-
-          style={{
-
-            position:"fixed",
-
-            top:"20px",
-
-            right:"20px",
-
-            background:"#2ecc71",
-
-            color:"white",
-
-            padding:"15px 25px",
-
-            borderRadius:"12px",
-
-            fontWeight:"bold",
-
-            zIndex:9999,
-
-            boxShadow:"0 5px 15px rgba(0,0,0,0.3)"
-
-          }}
-
-        >
-
-          {mensaje}
-
+      {mensaje && (
+        <div className="toast-exito">
+          <span className="toast-icon">✅</span>
+          <span>{mensaje}</span>
         </div>
-
-
       )}
-
-
-
-
-
-
-
-
-      <h2>
-
-        🍽️ Menú del Restaurante
-
-      </h2>
-
-
-
-
-
-
 
       {mesaId && (
-
-        <h3>
-
-          🪑 Pedido para Mesa {mesaId}
-
-        </h3>
-
+        <button
+          className="btn-volver"
+          onClick={() => navigate(`/mesa/${mesaId}`)}
+        >
+          ⬅ Volver a Mesa {mesaId}
+        </button>
       )}
 
+      <h2>🍽 Menú del Restaurante</h2>
 
-
-
-
-
+      {mesaId && (
+        <h3 style={{ marginBottom: "25px" }}>
+          Pedido para Mesa {mesaId}
+        </h3>
+      )}
 
       <div className="menu-grid">
-
-
-
-
-
-
-        {platos.map((plato)=>(
-
-
-
-
-
-          <div
-
-            className="menu-card"
-
-            key={plato.id}
-
-          >
-
-
-
-
-
+        {platos.map((plato) => (
+          <div className="menu-card" key={plato.idPlato}>
             <div className="menu-icon">
-
-              {plato.imagen}
-
+              {plato.imagen || "🍽️"}
             </div>
 
+            <h3>{plato.nombre}</h3>
 
-
-
-
-
-            <h3>
-
-              {plato.nombre}
-
-            </h3>
-
-
-
-
-
-
-            <p>
-
-              {plato.descripcion}
-
-            </p>
-
-
-
-
-
+            <p>{plato.descripcion}</p>
 
             <span className="precio">
-
-              ${plato.precio.toLocaleString()}
-
+              ${plato.precio?.toLocaleString()}
             </span>
 
-
-
-
-
-
-
-
             {mesaId && (
-
               <button
-
                 className="btn-order"
-
                 onClick={() => agregar(plato)}
-
               >
-
-                ➕ Agregar
-
+                Agregar al pedido
               </button>
-
-
             )}
-
-
-
-
-
-
           </div>
-
-
-
-
-
-
         ))}
-
-
-
-
-
       </div>
 
-
-
-
-
-
     </div>
-
-
   );
-
-
 }
-
 
 export default Menu;

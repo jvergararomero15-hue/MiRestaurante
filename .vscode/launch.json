@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-BakendProyectoApplication<bakendProyecto>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.bakend.bakendProyecto.BakendProyectoApplication",
+            "projectName": "bakendProyecto",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

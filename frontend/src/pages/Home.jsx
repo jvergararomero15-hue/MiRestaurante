@@ -1,4 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
 function Home() {
+
+  const navigate = useNavigate();
+
   return (
     <div className="home">
       <section className="hero">
@@ -8,7 +13,10 @@ function Home() {
             Experiencias gastronómicas inolvidables, preparadas por los mejores chefs.
           </p>
 
-          <button className="btn-primary">
+          <button
+            className="btn-primary"
+            onClick={() => navigate("/menu")}
+          >
             Ver Menú
           </button>
         </div>
@@ -30,45 +38,44 @@ function Home() {
           <p>Reconocidos como uno de los mejores restaurantes.</p>
         </div>
       </section>
+
       <section className="destacados">
+        <h2>Nuestros Platos Destacados</h2>
 
-  <h2>Nuestros Platos Destacados</h2>
+        <div className="destacados-grid">
 
-  <div className="destacados-grid">
+          <div className="destacado-card">
+            <img
+              src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd"
+              alt="Hamburguesa"
+            />
+            <h3>Hamburguesa Gourmet</h3>
+            <p>Carne premium, queso cheddar y salsa especial.</p>
+            <button>Ordenar Ahora</button>
+          </div>
 
-    <div className="destacado-card">
-      <img
-        src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd"
-        alt="Hamburguesa"
-      />
-      <h3>Hamburguesa Gourmet</h3>
-      <p>Carne premium, queso cheddar y salsa especial.</p>
-      <button>Ordenar Ahora</button>
-    </div>
+          <div className="destacado-card">
+            <img
+              src="https://images.unsplash.com/photo-1544025162-d76694265947"
+              alt="Entrecot"
+            />
+            <h3>Entrecot Premium</h3>
+            <p>Corte seleccionado acompañado de vegetales.</p>
+            <button>Ordenar Ahora</button>
+          </div>
 
-    <div className="destacado-card">
-      <img
-        src="https://images.unsplash.com/photo-1544025162-d76694265947"
-        alt="Entrecot"
-      />
-      <h3>Entrecot Premium</h3>
-      <p>Corte seleccionado acompañado de vegetales.</p>
-      <button>Ordenar Ahora</button>
-    </div>
+          <div className="destacado-card">
+            <img
+              src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad"
+              alt="Postre"
+            />
+            <h3>Cheesecake Especial</h3>
+            <p>Preparado artesanalmente todos los días.</p>
+            <button>Ordenar Ahora</button>
+          </div>
 
-    <div className="destacado-card">
-      <img
-        src="https://images.unsplash.com/photo-1533134242443-d4fd215305ad"
-        alt="Postre"
-      />
-      <h3>Cheesecake Especial</h3>
-      <p>Preparado artesanalmente todos los días.</p>
-      <button>Ordenar Ahora</button>
-    </div>
-
-  </div>
-
-</section>
+        </div>
+      </section>
     </div>
   );
 }
