@@ -118,13 +118,26 @@ const MesaService = {
     },
 
     async cobrarMesa(idMesa) {
+        const consumos = JSON.parse(localStorage.getItem(CLAVE_CONSUMOS)) || {};
+        const lista = consumos[idMesa] || [];
+        const total = lista.reduce((t, p) => t + (p.precio * p.cantidad), 0);
+
+        if (total > 0) {
+            const hoy = new Date().toISOString().split('T')[0];
+            await api.post('/pedidos', {
+                fecha: hoy,
+                total: total,
+                estado: "Cobrado",
+                mesaId: Number(idMesa)
+            });
+        }
+
         await api.put(`/mesas/${idMesa}`, {
             idMesa: Number(idMesa),
             estado: "Libre",
             reservadoPor: null
         });
 
-        const consumos = JSON.parse(localStorage.getItem(CLAVE_CONSUMOS)) || {};
         consumos[idMesa] = [];
         localStorage.setItem(CLAVE_CONSUMOS, JSON.stringify(consumos));
     },
