@@ -26,4 +26,7 @@ public class Mesa {
     @Column(name = "ESTADO")
     private String estado;
 
+    @Column(name = "RESERVADO_POR")
+    private String reservadoPor;
+
 }

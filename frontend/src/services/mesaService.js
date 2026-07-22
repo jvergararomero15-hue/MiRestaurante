@@ -1,250 +1,140 @@
-const CLAVE = "MESAS_RESTAURANTE";
+import api from './api';
 
-class MesaService {
+const CLAVE_CONSUMOS = "MESAS_CONSUMOS";
 
-    obtenerMesas() {
+const MesaService = {
 
-        let mesas = JSON.parse(localStorage.getItem(CLAVE));
+    async obtenerMesas() {
+        const response = await api.get('/mesas');
+        const mesasDB = response.data;
+        const consumos = JSON.parse(localStorage.getItem(CLAVE_CONSUMOS)) || {};
 
-        if (!mesas) {
+        return mesasDB.map(mesa => ({
+            id: mesa.idMesa,
+            numero: mesa.numero,
+            capacidad: mesa.capacidad,
+            estado: mesa.estado,
+            reservadoPor: mesa.reservadoPor || null,
+            consumos: consumos[mesa.idMesa] || [],
+            total: (consumos[mesa.idMesa] || []).reduce(
+                (t, p) => t + (p.precio * p.cantidad), 0
+            )
+        }));
+    },
 
-            mesas = [];
+    async obtenerMesa(id) {
+        const response = await api.get(`/mesas/${id}`);
+        const mesa = response.data;
+        const consumos = JSON.parse(localStorage.getItem(CLAVE_CONSUMOS)) || {};
 
-            for (let i = 1; i <= 8; i++) {
+        return {
+            id: mesa.idMesa,
+            numero: mesa.numero,
+            capacidad: mesa.capacidad,
+            estado: mesa.estado,
+            reservadoPor: mesa.reservadoPor || null,
+            consumos: consumos[mesa.idMesa] || [],
+            total: (consumos[mesa.idMesa] || []).reduce(
+                (t, p) => t + (p.precio * p.cantidad), 0
+            )
+        };
+    },
 
-                mesas.push({
-                    id: i,
-                    estado: "Libre",
-                    reservada: false,
-                    cliente: "",
-                    consumos: [],
-                    total: 0
-                });
+    async crearMesa(numero, capacidad) {
+        const response = await api.post('/mesas', {
+            numero: numero,
+            capacidad: capacidad || 4,
+            estado: "Libre"
+        });
+        return response.data;
+    },
 
-            }
+    async actualizarEstado(id, estado) {
+        const response = await api.put(`/mesas/${id}`, {
+            idMesa: id,
+            estado: estado
+        });
+        return response.data;
+    },
 
-            localStorage.setItem(CLAVE, JSON.stringify(mesas));
+    async eliminarMesa(id) {
+        await api.delete(`/mesas/${id}`);
+        const consumos = JSON.parse(localStorage.getItem(CLAVE_CONSUMOS)) || {};
+        delete consumos[id];
+        localStorage.setItem(CLAVE_CONSUMOS, JSON.stringify(consumos));
+    },
 
+    _guardarConsumos(mesaId, nuevosConsumos) {
+        const consumos = JSON.parse(localStorage.getItem(CLAVE_CONSUMOS)) || {};
+        consumos[mesaId] = nuevosConsumos;
+        localStorage.setItem(CLAVE_CONSUMOS, JSON.stringify(consumos));
+    },
+
+    async agregarProducto(idMesa, producto) {
+        const consumos = JSON.parse(localStorage.getItem(CLAVE_CONSUMOS)) || {};
+        const lista = consumos[idMesa] || [];
+
+        const existente = lista.find(p => p.nombre === producto.nombre);
+        if (existente) {
+            existente.cantidad++;
+        } else {
+            lista.push({ ...producto, cantidad: 1 });
         }
 
-        return mesas;
+        this._guardarConsumos(idMesa, lista);
 
-    }
+        const res = await api.get(`/mesas/${idMesa}`);
+        if (res.data.estado === "Libre") {
+            await api.put(`/mesas/${idMesa}`, {
+                idMesa: Number(idMesa),
+                estado: "Ocupada"
+            });
+        }
+    },
 
-    guardarMesas(mesas) {
+    async eliminarProducto(idMesa, indexProducto) {
+        const consumos = JSON.parse(localStorage.getItem(CLAVE_CONSUMOS)) || {};
+        const lista = consumos[idMesa] || [];
 
-        localStorage.setItem(CLAVE, JSON.stringify(mesas));
-
-    }
-
-    obtenerMesa(id) {
-
-        return this.obtenerMesas().find(
-            mesa => mesa.id === Number(id)
-        );
-
-    }
-
-   agregarProducto(idMesa, producto) {
-
-    const mesas = this.obtenerMesas();
-
-    const nuevas = mesas.map(mesa => {
-
-        if (mesa.id === Number(idMesa)) {
-
-            mesa.estado = "Ocupada";
-
-            const existente = mesa.consumos.find(
-                p => p.nombre === producto.nombre
-            );
-
-            if (existente) {
-
-                existente.cantidad++;
-
-            } else {
-
-                mesa.consumos.push({
-                    ...producto,
-                    cantidad: 1
-                });
-
-            }
-
-            mesa.total = mesa.consumos.reduce(
-                (total, p) => total + (p.precio * p.cantidad),
-                0
-            );
-
+        if (lista[indexProducto].cantidad > 1) {
+            lista[indexProducto].cantidad--;
+        } else {
+            lista.splice(indexProducto, 1);
         }
 
-        return mesa;
+        this._guardarConsumos(idMesa, lista);
+    },
 
-    });
-
-    this.guardarMesas(nuevas);
-
-}
-
-   eliminarProducto(idMesa, indexProducto) {
-
-    const mesas = this.obtenerMesas();
-
-    const nuevas = mesas.map(mesa => {
-
-        if (mesa.id === Number(idMesa)) {
-
-            const producto = mesa.consumos[indexProducto];
-
-            if (producto.cantidad > 1) {
-
-                producto.cantidad--;
-
-            } else {
-
-                mesa.consumos.splice(indexProducto, 1);
-
-            }
-
-            mesa.total = mesa.consumos.reduce(
-                (total, p) => total + (p.precio * p.cantidad),
-                0
-            );
-
-            if (mesa.total === 0) {
-
-                mesa.estado = "Libre";
-
-            }
-
-        }
-
-        return mesa;
-
-    });
-
-    this.guardarMesas(nuevas);
-
-}
-
-    reservarMesa(idMesa,nombre){
-
-        const mesas=this.obtenerMesas();
-
-        const nuevas=mesas.map(mesa=>{
-
-            if(mesa.id===Number(idMesa)){
-
-                mesa.reservada=true;
-
-                mesa.cliente=nombre;
-
-            }
-
-            return mesa;
-
+    async reservarMesa(idMesa, nombreCliente) {
+        await api.put(`/mesas/${idMesa}`, {
+            idMesa: Number(idMesa),
+            estado: "Reservada",
+            reservadoPor: nombreCliente || null
         });
 
-        this.guardarMesas(nuevas);
+        const consumos = JSON.parse(localStorage.getItem(CLAVE_CONSUMOS)) || {};
+        consumos[idMesa] = [];
+        localStorage.setItem(CLAVE_CONSUMOS, JSON.stringify(consumos));
+    },
 
-    }
-
-    cobrarMesa(idMesa){
-
-        const mesas=this.obtenerMesas();
-
-        const nuevas=mesas.map(mesa=>{
-
-            if(mesa.id===Number(idMesa)){
-
-                mesa.estado="Libre";
-
-                mesa.reservada=false;
-
-                mesa.cliente="";
-
-                mesa.consumos=[];
-
-                mesa.total=0;
-
-            }
-
-            return mesa;
-
+    async cobrarMesa(idMesa) {
+        await api.put(`/mesas/${idMesa}`, {
+            idMesa: Number(idMesa),
+            estado: "Libre",
+            reservadoPor: null
         });
 
-        this.guardarMesas(nuevas);
+        const consumos = JSON.parse(localStorage.getItem(CLAVE_CONSUMOS)) || {};
+        consumos[idMesa] = [];
+        localStorage.setItem(CLAVE_CONSUMOS, JSON.stringify(consumos));
+    },
 
+    async iniciarServicio(idMesa) {
+        await api.put(`/mesas/${idMesa}`, {
+            idMesa: Number(idMesa),
+            estado: "Ocupada"
+        });
     }
+};
 
-    iniciarServicio(idMesa){
-
-    const mesas = this.obtenerMesas();
-
-    const nuevas = mesas.map(mesa=>{
-
-        if(mesa.id===Number(idMesa)){
-
-            mesa.estado="Ocupada";
-
-            mesa.reservada=false;
-
-        }
-
-        return mesa;
-
-    });
-
-    this.guardarMesas(nuevas);
-
-}
-
-agregarMesa(){
-
-    const mesas = this.obtenerMesas();
-
-
-    const nuevoNumero = mesas.length + 1;
-
-
-    const nuevaMesa = {
-
-        id: nuevoNumero,
-        estado:"Libre",
-        reservada:false,
-        cliente:"",
-        consumos:[],
-        total:0
-
-    };
-
-
-    mesas.push(nuevaMesa);
-
-
-    this.guardarMesas(mesas);
-
-
-}
-eliminarMesa(idMesa){
-
-
-    const mesas = this.obtenerMesas();
-
-
-    const nuevasMesas = mesas.filter(
-
-        mesa => mesa.id !== Number(idMesa)
-
-    );
-
-
-    this.guardarMesas(nuevasMesas);
-
-
-}
-
-}
-
-export default new MesaService();
+export default MesaService;

@@ -28,9 +28,16 @@ public class MesaService {
 
     public Mesa actualizar(Long id, Mesa mesa) {
 
-        mesa.setIdMesa(id);
+        Mesa existente = mesaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mesa no encontrada"));
 
-        return mesaRepository.save(mesa);
+        if (mesa.getNumero() != null) existente.setNumero(mesa.getNumero());
+        if (mesa.getCapacidad() != null) existente.setCapacidad(mesa.getCapacidad());
+        if (mesa.getEstado() != null) existente.setEstado(mesa.getEstado());
+        if (mesa.getReservadoPor() != null) existente.setReservadoPor(mesa.getReservadoPor());
+        if (mesa.getEstado() != null && mesa.getEstado().equals("Libre")) existente.setReservadoPor(null);
+
+        return mesaRepository.save(existente);
     }
 
     public void eliminar(Long id) {

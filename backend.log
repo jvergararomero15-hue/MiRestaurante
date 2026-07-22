@@ -1,0 +1,44 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-07-22T10:44:49.639-05:00  INFO 5176 --- [           main] c.b.b.BakendProyectoApplication          : Starting BakendProyectoApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 5176 (C:\Users\joseb\Documents\ProyectosVSC\Restaurante-Full\bakendProyecto\target\bakendProyecto-0.0.1-SNAPSHOT.jar started by joseb in C:\Users\joseb\Documents\ProyectosVSC\Restaurante-Full\bakendProyecto)
+2026-07-22T10:44:49.648-05:00  INFO 5176 --- [           main] c.b.b.BakendProyectoApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-07-22T10:44:53.086-05:00  INFO 5176 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-22T10:44:53.404-05:00  INFO 5176 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 277 ms. Found 7 JPA repository interfaces.
+2026-07-22T10:44:56.046-05:00  INFO 5176 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-07-22T10:44:56.092-05:00  INFO 5176 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-07-22T10:44:56.096-05:00  INFO 5176 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-07-22T10:44:56.217-05:00  INFO 5176 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-07-22T10:44:56.223-05:00  INFO 5176 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 6432 ms
+2026-07-22T10:44:56.642-05:00 ERROR 5176 --- [           main] o.s.b.web.embedded.tomcat.TomcatStarter  : Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'jwtFilter': Unsatisfied dependency expressed through field 'userDetailsService': Error creating bean with name 'customUserDetailsService': Unsatisfied dependency expressed through field 'usuarioRepository': Error creating bean with name 'usuarioRepository' defined in com.bakend.bakendProyecto.Repositorys.UsuarioRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Cannot resolve reference to bean 'jpaSharedEM_entityManagerFactory' while setting bean property 'entityManager'
+2026-07-22T10:44:56.746-05:00  INFO 5176 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-07-22T10:44:57.264-05:00  WARN 5176 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2026-07-22T10:44:57.300-05:00  INFO 5176 --- [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-07-22T10:44:57.365-05:00 ERROR 5176 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+Reason: Failed to determine a suitable driver class
+
+
+Action:
+
+Consider the following:
+	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
+	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).
+

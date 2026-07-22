@@ -28,19 +28,21 @@ function Menu() {
     cargarPlatos();
   }, []);
 
-  const agregar = (plato) => {
+  const agregar = async (plato) => {
     if (!mesaId) return;
 
-    MesaService.agregarProducto(mesaId, {
-      nombre: plato.nombre,
-      precio: plato.precio,
-    });
+    try {
+      await MesaService.agregarProducto(mesaId, {
+        nombre: plato.nombre,
+        precio: plato.precio,
+      });
 
-    setMensaje(`✅ ${plato.nombre} agregado con éxito a la Mesa ${mesaId}`);
+      setMensaje(`${plato.nombre} agregado a Mesa ${mesaId}`);
 
-    setTimeout(() => {
-      setMensaje("");
-    }, 2500);
+      setTimeout(() => setMensaje(""), 2500);
+    } catch (error) {
+      console.error("Error al agregar plato:", error);
+    }
   };
 
   if (cargando) {
