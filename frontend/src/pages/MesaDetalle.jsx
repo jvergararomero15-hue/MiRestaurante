@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MesaService from "../services/MesaService";
+import AuthService from "../services/AuthService";
 
 function MesaDetalle() {
 
@@ -47,6 +48,8 @@ function MesaDetalle() {
     await MesaService.cobrarMesa(id);
     navigate("/mesas");
   };
+
+  const esAdmin = AuthService.obtenerUsuario()?.rol === "ADMIN";
 
   return (
     <div className="mesa-detalle">
@@ -113,9 +116,15 @@ function MesaDetalle() {
         Total: ${(mesa.total || 0).toLocaleString()}
       </h2>
 
-      <button className="btn-cobrar" onClick={cobrar}>
-        Cobrar Mesa
-      </button>
+      {esAdmin ? (
+        <button className="btn-cobrar" onClick={cobrar}>
+          Cobrar Mesa
+        </button>
+      ) : (
+        <p style={{ color: "#999", textAlign: "center", marginTop: "10px" }}>
+          Solo un administrador puede cobrar esta mesa.
+        </p>
+      )}
     </div>
   );
 }

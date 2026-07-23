@@ -17,4 +17,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     @Query("SELECT COUNT(r) FROM Reserva r WHERE r.fecha = :fecha AND r.estado = :estado")
     long contarPorFechaYEstado(@Param("fecha") LocalDate fecha, @Param("estado") String estado);
 
+    @Query("SELECT COUNT(r) FROM Reserva r WHERE r.mesa.idMesa = :mesaId AND r.fecha = :fecha AND r.hora = :hora AND r.estado = 'Activa'")
+    long existeReservaActiva(@Param("mesaId") Long mesaId, @Param("fecha") LocalDate fecha, @Param("hora") String hora);
+
 }

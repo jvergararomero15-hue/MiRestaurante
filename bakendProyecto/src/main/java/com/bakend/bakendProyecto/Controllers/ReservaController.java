@@ -9,6 +9,8 @@ import com.bakend.bakendProyecto.Services.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.ResponseEntity;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,9 @@ public class ReservaController {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private com.bakend.bakendProyecto.Repositorys.ReservaRepository reservaRepository;
+
     @GetMapping
     public List<Reserva> listar() {
         return reservaService.listar();
@@ -38,12 +43,25 @@ public class ReservaController {
     }
 
     @PostMapping
-    public Reserva guardar(@RequestBody Map<String, Object> body) {
+    public ResponseEntity<?> guardar(@RequestBody Map<String, Object> body) {
+
+        LocalDate fecha = LocalDate.parse((String) body.get("fecha"));
+        String hora = (String) body.get("hora");
+
+        if (body.get("mesaId") != null) {
+            Long mesaId = Long.valueOf(body.get("mesaId").toString());
+
+            long conflictos = reservaRepository.existeReservaActiva(mesaId, fecha, hora);
+            if (conflictos > 0) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Esa mesa ya está reservada para esa fecha y hora"));
+            }
+        }
 
         Reserva reserva = new Reserva();
 
-        reserva.setFecha(LocalDate.parse((String) body.get("fecha")));
-        reserva.setHora((String) body.get("hora"));
+        reserva.setFecha(fecha);
+        reserva.setHora(hora);
         reserva.setCantidadPersonas(Integer.valueOf(body.get("cantidadPersonas").toString()));
         reserva.setEstado((String) body.getOrDefault("estado", "Activa"));
 
@@ -57,7 +75,7 @@ public class ReservaController {
             clienteRepository.findById(clienteId).ifPresent(reserva::setCliente);
         }
 
-        return reservaService.guardar(reserva);
+        return ResponseEntity.ok(reservaService.guardar(reserva));
     }
 
     @PutMapping("/{id}")

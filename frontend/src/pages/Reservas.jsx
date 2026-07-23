@@ -55,7 +55,8 @@ function Reservas() {
       navigate("/mesas");
     } catch (error) {
       console.error("Error al reservar:", error);
-      alert("Error al crear la reserva");
+      const msg = error.response?.data?.error || "Error al crear la reserva";
+      alert(msg);
     }
   };
 
