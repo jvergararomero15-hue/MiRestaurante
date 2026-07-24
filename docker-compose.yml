@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  oracle:
+    image: gvenzl/oracle-free:21-slim
+    container_name: restaurante-oracle
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: Restaurante2026
+      APP_USER: RESTAURANTE
+      APP_USER_PASSWORD: Restaurante2026
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+    networks:
+      - restaurante-network
+
+  backend:
+    build:
+      context: ./bakendProyecto
+      dockerfile: Dockerfile
+    container_name: restaurante-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@//oracle:1521/XEPDB1
+      SPRING_DATASOURCE_USERNAME: RESTAURANTE
+      SPRING_DATASOURCE_PASSWORD: Restaurante2026
+      SPRING_PROFILES_ACTIVE: prod
+    depends_on:
+      oracle:
+        condition: service_healthy
+    networks:
+      - restaurante-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: restaurante-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - restaurante-network
+
+volumes:
+  oracle-data:
+
+networks:
+  restaurante-network:
+    driver: bridge

@@ -4,6 +4,7 @@ import com.bakend.bakendProyecto.Repositorys.DetallePedidoRepository;
 import com.bakend.bakendProyecto.Repositorys.MesaRepository;
 import com.bakend.bakendProyecto.Repositorys.PedidoRepository;
 import com.bakend.bakendProyecto.Repositorys.ReservaRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
+@Slf4j
 public class AdminController {
 
     @Autowired
@@ -26,6 +28,7 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public Map<String, Object> dashboard() {
+        log.debug("Cargando dashboard de administrador");
 
         Map<String, Object> data = new HashMap<>();
 
@@ -54,12 +57,11 @@ public class AdminController {
 
     @GetMapping("/ventas")
     public Object[] ventas(@RequestParam(required = false) String fecha) {
-
         LocalDate fechaConsulta = (fecha != null)
                 ? LocalDate.parse(fecha)
                 : LocalDate.now();
 
+        log.debug("Consultando ventas para: {}", fechaConsulta);
         return pedidoRepository.findByFecha(fechaConsulta).toArray();
     }
-
 }

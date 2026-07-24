@@ -6,6 +6,7 @@ import com.bakend.bakendProyecto.Modelo.Pedido;
 import com.bakend.bakendProyecto.Repositorys.ClienteRepository;
 import com.bakend.bakendProyecto.Repositorys.MesaRepository;
 import com.bakend.bakendProyecto.Services.PedidoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/pedidos")
 @CrossOrigin(origins = "*")
+@Slf4j
 public class PedidoController {
 
     @Autowired
@@ -41,6 +43,10 @@ public class PedidoController {
     @PostMapping
     public Pedido guardar(@RequestBody Map<String, Object> body) {
 
+        if (body.get("fecha") == null || body.get("total") == null) {
+            throw new IllegalArgumentException("Los campos fecha y total son obligatorios");
+        }
+
         Pedido pedido = new Pedido();
 
         pedido.setFecha(LocalDate.parse((String) body.get("fecha")));
@@ -57,18 +63,20 @@ public class PedidoController {
             clienteRepository.findById(clienteId).ifPresent(pedido::setCliente);
         }
 
+        log.info("Creando pedido para fecha {} total {}", pedido.getFecha(), pedido.getTotal());
         return pedidoService.guardar(pedido);
     }
 
     @PutMapping("/{id}")
     public Pedido actualizar(@PathVariable Long id,
                              @RequestBody Pedido pedido) {
+        log.info("Actualizando pedido ID: {}", id);
         return pedidoService.actualizar(id, pedido);
     }
 
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
+        log.info("Eliminando pedido ID: {}", id);
         pedidoService.eliminar(id);
     }
-
 }

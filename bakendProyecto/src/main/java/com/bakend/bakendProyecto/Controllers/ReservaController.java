@@ -6,6 +6,7 @@ import com.bakend.bakendProyecto.Modelo.Reserva;
 import com.bakend.bakendProyecto.Repositorys.ClienteRepository;
 import com.bakend.bakendProyecto.Repositorys.MesaRepository;
 import com.bakend.bakendProyecto.Services.ReservaService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/reservas")
+@Slf4j
 public class ReservaController {
 
     @Autowired
@@ -45,6 +47,11 @@ public class ReservaController {
     @PostMapping
     public ResponseEntity<?> guardar(@RequestBody Map<String, Object> body) {
 
+        if (body.get("fecha") == null || body.get("hora") == null || body.get("cantidadPersonas") == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Los campos fecha, hora y cantidadPersonas son obligatorios"));
+        }
+
         LocalDate fecha = LocalDate.parse((String) body.get("fecha"));
         String hora = (String) body.get("hora");
 
@@ -53,6 +60,7 @@ public class ReservaController {
 
             long conflictos = reservaRepository.existeReservaActiva(mesaId, fecha, hora);
             if (conflictos > 0) {
+                log.warn("Conflicto de reserva para mesa {} en {} {}", mesaId, fecha, hora);
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Esa mesa ya está reservada para esa fecha y hora"));
             }
@@ -75,18 +83,20 @@ public class ReservaController {
             clienteRepository.findById(clienteId).ifPresent(reserva::setCliente);
         }
 
+        log.info("Creando reserva para fecha {} hora {}", fecha, hora);
         return ResponseEntity.ok(reservaService.guardar(reserva));
     }
 
     @PutMapping("/{id}")
     public Reserva actualizar(@PathVariable Long id,
                               @RequestBody Reserva reserva) {
+        log.info("Actualizando reserva ID: {}", id);
         return reservaService.actualizar(id, reserva);
     }
 
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
+        log.info("Eliminando reserva ID: {}", id);
         reservaService.eliminar(id);
     }
-
 }
