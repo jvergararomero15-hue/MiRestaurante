@@ -42,7 +42,8 @@ public class SecurityConfig {
                                 "/detalle-pedidos/**",
                                 "/reservas/**",
                                 "/usuarios/**",
-                                "/admin/**"
+                                "/admin/**",
+                                "/chat/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

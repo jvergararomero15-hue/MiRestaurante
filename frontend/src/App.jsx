@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Chatbot from './components/Chatbot';
 import RutaAdmin from './components/RutaAdmin';
 import AdminLayout from './components/AdminLayout';
 
@@ -64,6 +65,7 @@ function App() {
                 </Routes>
               </main>
               <Footer />
+              <Chatbot />
             </>
           }
         />
