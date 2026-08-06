@@ -40,6 +40,7 @@ public class PlatoController {
         plato.setImagen(request.getImagen());
         plato.setCategoria(request.getCategoria());
         plato.setDisponible(request.getDisponible());
+        plato.setModelo3d(request.getModelo3d());
         return platoService.guardar(plato);
     }
 
@@ -54,6 +55,7 @@ public class PlatoController {
         plato.setImagen(request.getImagen());
         plato.setCategoria(request.getCategoria());
         plato.setDisponible(request.getDisponible());
+        plato.setModelo3d(request.getModelo3d());
         return platoService.actualizar(id, plato);
     }
 

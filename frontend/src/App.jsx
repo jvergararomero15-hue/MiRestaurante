@@ -15,6 +15,7 @@ import Reservas from './pages/Reservas';
 import Carrito from './pages/Carrito';
 import Mesas from './pages/Mesas';
 import MesaDetalle from './pages/MesaDetalle';
+import Plato3D from './pages/Plato3D';
 
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminReservas from './pages/admin/AdminReservas';
@@ -62,6 +63,7 @@ function App() {
                   <Route path="/carrito" element={<Carrito />} />
                   <Route path="/mesas" element={<Mesas />} />
                   <Route path="/mesa/:id" element={<MesaDetalle />} />
+                  <Route path="/plato-3d" element={<Plato3D />} />
                 </Routes>
               </main>
               <Footer />

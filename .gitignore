@@ -1,0 +1,11 @@
+# Logs
+*.log
+logs/
+bakendProyecto/logs/
+
+# Node
+node_modules/
+
+# Builds
+dist/
+target/

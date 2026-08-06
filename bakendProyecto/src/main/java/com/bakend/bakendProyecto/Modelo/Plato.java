@@ -35,4 +35,7 @@ public class Plato {
     @Column(name = "DISPONIBLE")
     private String disponible;
 
+    @Column(name = "MODELO3D")
+    private String modelo3d;
+
 }

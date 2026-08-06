@@ -20,4 +20,5 @@ public class PlatoRequest {
     private String imagen;
     private String categoria;
     private String disponible;
+    private String modelo3d;
 }

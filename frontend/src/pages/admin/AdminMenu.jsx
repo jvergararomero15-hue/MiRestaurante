@@ -4,7 +4,7 @@ import MenuService from '../../services/MenuService';
 function AdminMenu() {
     const [platos, setPlatos] = useState([]);
     const [cargando, setCargando] = useState(true);
-    const [form, setForm] = useState({ nombre: '', descripcion: '', precio: '', imagen: '', categoria: '' });
+    const [form, setForm] = useState({ nombre: '', descripcion: '', precio: '', imagen: '', categoria: '', modelo3d: '' });
     const [editando, setEditando] = useState(null);
 
     useEffect(() => {
@@ -47,7 +47,7 @@ function AdminMenu() {
                 await MenuService.crearPlato(plato);
             }
 
-            setForm({ nombre: '', descripcion: '', precio: '', imagen: '', categoria: '' });
+            setForm({ nombre: '', descripcion: '', precio: '', imagen: '', categoria: '', modelo3d: '' });
             cargar();
         } catch (error) {
             console.error('Error al guardar plato:', error);
@@ -60,7 +60,8 @@ function AdminMenu() {
             descripcion: plato.descripcion,
             precio: plato.precio,
             imagen: plato.imagen || '',
-            categoria: plato.categoria || ''
+            categoria: plato.categoria || '',
+            modelo3d: plato.modelo3d || ''
         });
         setEditando(plato.idPlato);
     };
@@ -87,6 +88,7 @@ function AdminMenu() {
                 <input name="precio" type="text" placeholder="Precio (ej: 50000)" value={form.precio} onChange={handleChange} required />
                 <input name="imagen" placeholder="Emoji/Icono" value={form.imagen} onChange={handleChange} />
                 <input name="categoria" placeholder="Categoría" value={form.categoria} onChange={handleChange} />
+                <input name="modelo3d" placeholder="Modelo 3D (.glb ej: /models/pollo.glb)" value={form.modelo3d} onChange={handleChange} />
                 <button type="submit" className="btn-order">
                     {editando ? 'Actualizar' : 'Agregar'}
                 </button>

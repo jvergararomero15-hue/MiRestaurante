@@ -95,6 +95,20 @@ function Menu() {
               ${plato.precio?.toLocaleString()}
             </span>
 
+            <button
+              className="btn-3d"
+              onClick={() => {
+                const modelo = plato.modelo3d || "";
+                if (!modelo) {
+                  alert("Este plato aún no tiene modelo 3D. El administrador puede asignarlo desde el panel.");
+                  return;
+                }
+                navigate(`/plato-3d?nombre=${encodeURIComponent(plato.nombre)}&modelo=${encodeURIComponent(modelo)}`);
+              }}
+            >
+              🥘 Ver en 3D
+            </button>
+
             {mesaId && (
               <button
                 className="btn-order"
