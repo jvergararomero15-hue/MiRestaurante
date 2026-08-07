@@ -1,9 +1,15 @@
 package com.bakend.bakendProyecto.Services;
 
 import com.bakend.bakendProyecto.Modelo.Mesa;
+import com.bakend.bakendProyecto.Modelo.Pedido;
+import com.bakend.bakendProyecto.Modelo.Reserva;
+import com.bakend.bakendProyecto.Repositorys.DetallePedidoRepository;
 import com.bakend.bakendProyecto.Repositorys.MesaRepository;
+import com.bakend.bakendProyecto.Repositorys.PedidoRepository;
+import com.bakend.bakendProyecto.Repositorys.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +19,15 @@ public class MesaService {
 
     @Autowired
     private MesaRepository mesaRepository;
+
+    @Autowired
+    private ReservaRepository reservaRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private DetallePedidoRepository detallePedidoRepository;
 
     public List<Mesa> listar() {
         return mesaRepository.findAll();
@@ -40,7 +55,20 @@ public class MesaService {
         return mesaRepository.save(existente);
     }
 
+    @Transactional
     public void eliminar(Long id) {
+
+        List<Reserva> reservas = reservaRepository.findByMesa_IdMesa(id);
+        reservaRepository.deleteAll(reservas);
+
+        List<Pedido> pedidos = pedidoRepository.findByMesa_IdMesa(id);
+        for (Pedido pedido : pedidos) {
+            detallePedidoRepository.deleteAll(
+                    detallePedidoRepository.findByPedido_IdPedido(pedido.getIdPedido())
+            );
+        }
+        pedidoRepository.deleteAll(pedidos);
+
         mesaRepository.deleteById(id);
     }
 

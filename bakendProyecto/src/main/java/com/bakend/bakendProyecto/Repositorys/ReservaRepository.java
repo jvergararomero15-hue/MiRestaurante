@@ -14,6 +14,8 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     List<Reserva> findByFecha(LocalDate fecha);
 
+    List<Reserva> findByMesa_IdMesa(Long mesaId);
+
     @Query("SELECT COUNT(r) FROM Reserva r WHERE r.fecha = :fecha AND r.estado = :estado")
     long contarPorFechaYEstado(@Param("fecha") LocalDate fecha, @Param("estado") String estado);
 

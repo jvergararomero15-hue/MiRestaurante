@@ -14,6 +14,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     List<Pedido> findByFecha(LocalDate fecha);
 
+    List<Pedido> findByMesa_IdMesa(Long mesaId);
+
     @Query("SELECT COALESCE(SUM(p.total), 0.0) FROM Pedido p WHERE p.fecha = :fecha AND p.estado = 'Cobrado'")
     Double totalVentasPorFecha(@Param("fecha") LocalDate fecha);
 
