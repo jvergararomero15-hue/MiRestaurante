@@ -2395,6 +2395,40 @@ padding:30px;
     --progress-bar-color: #f3b33d;
 }
 
+.plato3d-generico {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    position: relative;
+}
+
+.plato3d-generico-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.plato3d-generico-canvas canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.plato3d-generico-leyenda {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .plato3d-volver {
     position: absolute;
     top: 16px;

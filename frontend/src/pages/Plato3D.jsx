@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import '@google/model-viewer';
+import Plato3DGenerico from '../components/Plato3DGenerico';
 
 function Plato3D() {
 
@@ -9,6 +10,7 @@ function Plato3D() {
 
     const nombre = searchParams.get("nombre") || "Plato";
     const modelo = searchParams.get("modelo") || "";
+    const foto = searchParams.get("foto") || "";
 
     const modeloMesa = modelo.replace(/\.glb$/i, "_mesa.glb");
 
@@ -28,6 +30,21 @@ function Plato3D() {
             return false;
         }
     })();
+
+    if (!modelo && foto) {
+        return (
+            <div className="plato3d-contenedor">
+                <button className="plato3d-volver" onClick={() => navigate(-1)}>
+                    ⬅ Volver
+                </button>
+                <div className="plato3d-info">
+                    <h2>{nombre}</h2>
+                    <p>👆 Arrastrá para rotar y ver la mesa desde todos los ángulos</p>
+                </div>
+                <Plato3DGenerico foto={foto} nombre={nombre} />
+            </div>
+        );
+    }
 
     return (
         <div className="plato3d-contenedor">

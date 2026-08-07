@@ -109,7 +109,11 @@ function Menu() {
               onClick={() => {
                 const modelo = plato.modelo3d || "";
                 if (!modelo) {
-                  alert("Este plato aún no tiene modelo 3D. El administrador puede asignarlo desde el panel.");
+                  if (!plato.imagen) {
+                    alert("Este plato aún no tiene modelo 3D ni foto. El administrador puede asignarlos desde el panel.");
+                    return;
+                  }
+                  navigate(`/plato-3d?nombre=${encodeURIComponent(plato.nombre)}&foto=${encodeURIComponent(plato.imagen)}`);
                   return;
                 }
                 navigate(`/plato-3d?nombre=${encodeURIComponent(plato.nombre)}&modelo=${encodeURIComponent(modelo)}`);
