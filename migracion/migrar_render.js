@@ -6,7 +6,15 @@ const PASSWORD_USUARIOS = 'Restaurante2026';
 
 const MODELO3D_PLATOS = {
     'pollo': '/models/pollo.glb',
-    'Agua': '/models/bebida.glb'
+    'Agua': '/models/bebida.glb',
+    'Bandeja Paisa': '/models/bandeja_paisa.glb',
+    'Sancocho de Gallina': '/models/sancocho.glb',
+    'Ajiaco Santafereño': '/models/ajiaco.glb',
+    'Arepa de Huevo': '/models/arepa.glb',
+    'Empanadas de Carne': '/models/empanadas.glb',
+    'Arroz de Mariscos': '/models/mariscos.glb',
+    'Tamal Tolimense': '/models/tamal.glb',
+    'Jugo Natural': '/models/jugo.glb'
 };
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));

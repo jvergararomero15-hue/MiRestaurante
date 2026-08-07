@@ -84,7 +84,16 @@ function Menu() {
         {platos.map((plato) => (
           <div className="menu-card" key={plato.idPlato}>
             <div className="menu-icon">
-              {plato.imagen || "🍽️"}
+              {plato.imagen ? (
+                <img
+                  src={plato.imagen}
+                  alt={plato.nombre}
+                  className="menu-imagen"
+                  loading="lazy"
+                />
+              ) : (
+                "🍽️"
+              )}
             </div>
 
             <h3>{plato.nombre}</h3>

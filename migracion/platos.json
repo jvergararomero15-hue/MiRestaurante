@@ -1,1 +1,92 @@
-[{"idPlato":1,"nombre":"pollo","descripcion":"pollo delicioso","precio":50000.0,"imagen":null,"categoria":"fuerte","disponible":null},{"idPlato":2,"nombre":"Agua","descripcion":"bebida","precio":10000.0,"imagen":null,"categoria":"suave","disponible":null}]
+[
+  {
+    "idPlato": 1,
+    "nombre": "pollo",
+    "descripcion": "pollo delicioso",
+    "precio": 50000.0,
+    "imagen": "https://www.themealdb.com/images/media/meals/cj56fs1762340001.jpg",
+    "categoria": "fuerte",
+    "disponible": null
+  },
+  {
+    "idPlato": 2,
+    "nombre": "Agua",
+    "descripcion": "bebida",
+    "precio": 10000.0,
+    "imagen": null,
+    "categoria": "suave",
+    "disponible": null
+  },
+  {
+    "idPlato": 3,
+    "nombre": "Bandeja Paisa",
+    "descripcion": "Frijoles, arroz, chicharrón, huevo, plátano y aguacate",
+    "precio": 28000.0,
+    "imagen": "https://www.themealdb.com/images/media/meals/j8c1d51782772399.jpg",
+    "categoria": "fuerte",
+    "disponible": "Disponible"
+  },
+  {
+    "idPlato": 4,
+    "nombre": "Sancocho de Gallina",
+    "descripcion": "Sancocho casero con gallina, papa, yuca y mazorca",
+    "precio": 22000.0,
+    "imagen": "https://www.themealdb.com/images/media/meals/lx1kkj1593349302.jpg",
+    "categoria": "fuerte",
+    "disponible": "Disponible"
+  },
+  {
+    "idPlato": 5,
+    "nombre": "Ajiaco Santafereño",
+    "descripcion": "Ajiaco con pollo, mazorca, guascas y crema de leche",
+    "precio": 20000.0,
+    "imagen": "https://www.themealdb.com/images/media/meals/yf5eyw1783804464.jpg",
+    "categoria": "fuerte",
+    "disponible": "Disponible"
+  },
+  {
+    "idPlato": 6,
+    "nombre": "Arepa de Huevo",
+    "descripcion": "Arepa frita rellena de huevo",
+    "precio": 6000.0,
+    "imagen": "https://www.themealdb.com/images/media/meals/jgl9qq1764437635.jpg",
+    "categoria": "entrada",
+    "disponible": "Disponible"
+  },
+  {
+    "idPlato": 7,
+    "nombre": "Empanadas de Carne",
+    "descripcion": "Tres empanadas de carne con ají",
+    "precio": 9000.0,
+    "imagen": "https://www.themealdb.com/images/media/meals/dxpc7j1764370714.jpg",
+    "categoria": "entrada",
+    "disponible": "Disponible"
+  },
+  {
+    "idPlato": 8,
+    "nombre": "Arroz de Mariscos",
+    "descripcion": "Arroz con camarones, mejillones y calamares",
+    "precio": 38000.0,
+    "imagen": "https://www.themealdb.com/images/media/meals/9bl20p1763248192.jpg",
+    "categoria": "fuerte",
+    "disponible": "Disponible"
+  },
+  {
+    "idPlato": 9,
+    "nombre": "Tamal Tolimense",
+    "descripcion": "Tamal relleno de cerdo, pollo y verduras en hoja de plátano",
+    "precio": 15000.0,
+    "imagen": "https://www.themealdb.com/images/media/meals/mjgl9z1784393681.jpg",
+    "categoria": "entrada",
+    "disponible": "Disponible"
+  },
+  {
+    "idPlato": 10,
+    "nombre": "Jugo Natural",
+    "descripcion": "Jugo natural de mango",
+    "precio": 8000.0,
+    "imagen": "https://www.themealdb.com/images/media/meals/pjbaq11784731571.jpg",
+    "categoria": "bebida",
+    "disponible": "Disponible"
+  }
+]
