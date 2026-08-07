@@ -84,7 +84,7 @@ function Menu() {
         {platos.map((plato) => (
           <div className="menu-card" key={plato.idPlato}>
             <div className="menu-icon">
-              {plato.imagen ? (
+              {plato.imagen && /^https?:\/\//i.test(plato.imagen) ? (
                 <img
                   src={plato.imagen}
                   alt={plato.nombre}
@@ -92,7 +92,7 @@ function Menu() {
                   loading="lazy"
                 />
               ) : (
-                "🍽️"
+                plato.imagen || "🍽️"
               )}
             </div>
 
