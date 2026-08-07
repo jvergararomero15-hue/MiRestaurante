@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MesaService from "../services/MesaService";
+import AuthService from "../services/AuthService";
 
 function Mesas() {
 
   const navigate = useNavigate();
   const [mesas, setMesas] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const esAdmin = AuthService.obtenerUsuario()?.rol === "ADMIN";
 
   useEffect(() => {
     cargarMesas();
@@ -68,9 +70,11 @@ function Mesas() {
         Administra el estado de cada mesa del restaurante.
       </p>
 
-      <button className="btn-order" onClick={agregarNuevaMesa}>
-        Agregar Mesa
-      </button>
+      {esAdmin && (
+        <button className="btn-order" onClick={agregarNuevaMesa}>
+          Agregar Mesa
+        </button>
+      )}
 
       <div className="mesas-grid">
         {mesas.map((mesa) => (
@@ -87,15 +91,17 @@ function Mesas() {
             )}
             <h4>${(mesa.total || 0).toLocaleString()}</h4>
 
-            <button
-              className="btn-eliminar"
-              onClick={(e) => {
-                e.stopPropagation();
-                eliminarMesa(mesa.id);
-              }}
-            >
-              Eliminar
-            </button>
+            {esAdmin && (
+              <button
+                className="btn-eliminar"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  eliminarMesa(mesa.id);
+                }}
+              >
+                Eliminar
+              </button>
+            )}
           </div>
         ))}
       </div>

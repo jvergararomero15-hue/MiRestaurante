@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -50,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(
-                                    userDetails, null, new ArrayList<>()
+                                    userDetails, null, userDetails.getAuthorities()
                             );
 
                     authToken.setDetails(

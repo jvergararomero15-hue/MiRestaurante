@@ -5,7 +5,7 @@ const DIR = __dirname;
 const PASSWORD_USUARIOS = 'Restaurante2026';
 
 const MODELO3D_PLATOS = {
-    'poyo': '/models/pollo.glb',
+    'pollo': '/models/pollo.glb',
     'Agua': '/models/bebida.glb'
 };
 
