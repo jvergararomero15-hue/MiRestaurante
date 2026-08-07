@@ -36,6 +36,7 @@ function AdminMesas() {
             setMesas(mesas.filter(m => m.idMesa !== id));
         } catch (error) {
             console.error('Error al eliminar:', error);
+            alert(error.response?.data?.error || 'No se pudo eliminar la mesa');
         }
     };
 

@@ -75,7 +75,14 @@ public class ReservaController {
 
         if (body.get("mesaId") != null) {
             Long mesaId = Long.valueOf(body.get("mesaId").toString());
-            mesaRepository.findById(mesaId).ifPresent(reserva::setMesa);
+            Mesa mesa = mesaRepository.findById(mesaId).orElse(null);
+            if (mesa != null) {
+                reserva.setMesa(mesa);
+                if ("Libre".equals(mesa.getEstado())) {
+                    mesa.setEstado("Reservada");
+                    mesaRepository.save(mesa);
+                }
+            }
         }
 
         if (body.get("clienteId") != null) {
@@ -96,7 +103,18 @@ public class ReservaController {
 
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
+
+        Reserva reserva = reservaRepository.findById(id).orElse(null);
+        Mesa mesa = reserva != null ? reserva.getMesa() : null;
+
         log.info("Eliminando reserva ID: {}", id);
         reservaService.eliminar(id);
+
+        if (mesa != null && "Reservada".equals(mesa.getEstado())
+                && reservaRepository.countByMesa_IdMesaAndEstado(mesa.getIdMesa(), "Activa") == 0) {
+            mesa.setEstado("Libre");
+            mesa.setReservadoPor(null);
+            mesaRepository.save(mesa);
+        }
     }
 }

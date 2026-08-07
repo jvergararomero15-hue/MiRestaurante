@@ -41,6 +41,7 @@ public class MesaService {
         return mesaRepository.save(mesa);
     }
 
+    @Transactional
     public Mesa actualizar(Long id, Mesa mesa) {
 
         Mesa existente = mesaRepository.findById(id)
@@ -52,11 +53,29 @@ public class MesaService {
         if (mesa.getReservadoPor() != null) existente.setReservadoPor(mesa.getReservadoPor());
         if (mesa.getEstado() != null && mesa.getEstado().equals("Libre")) existente.setReservadoPor(null);
 
+        if ("Ocupada".equals(mesa.getEstado())) {
+            List<Reserva> activas = reservaRepository.findByMesa_IdMesaAndEstado(id, "Activa");
+            for (Reserva r : activas) {
+                r.setEstado("Atendida");
+                reservaRepository.save(r);
+            }
+        }
+
         return mesaRepository.save(existente);
     }
 
     @Transactional
     public void eliminar(Long id) {
+
+        Mesa mesa = mesaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mesa no encontrada"));
+
+        if (!"Libre".equals(mesa.getEstado())) {
+            throw new IllegalStateException("No se puede eliminar una mesa ocupada o reservada");
+        }
+        if (reservaRepository.countByMesa_IdMesaAndEstado(id, "Activa") > 0) {
+            throw new IllegalStateException("No se puede eliminar una mesa con reservas activas");
+        }
 
         List<Reserva> reservas = reservaRepository.findByMesa_IdMesa(id);
         reservaRepository.deleteAll(reservas);
